@@ -1,2 +1,6 @@
 // test lmao
-wait(seconds = 5, decipixeli=3)
+wait (seconds = 5, async = true)
+wait (millesimi=30, jumpto=3)
+
+
+
