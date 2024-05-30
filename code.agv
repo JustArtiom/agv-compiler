@@ -1,6 +1,2 @@
 // test lmao
-wait (seconds = 5, async = true)
-wait (millesimi=30, jumpto=3)
-
-
-
+blindMovement(steerPosition=-90,centimetri=300,positionStearAfterMovement=90,laser=1,speed=20)

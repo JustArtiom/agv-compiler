@@ -254,15 +254,6 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    
-
-    FreeSpaceiD6:{
-        id: "00006",
-        params: {
-        },
-    },
-
-
     jumpList:{
         id: "00007",
         params: {
