@@ -10,20 +10,21 @@ export interface SysFunction {
 }
 
 export const funcToId: Record<string, SysFunction> = {
+
     wait: {
         id: "00001",
         params: {
-            millesimi: {
+            milsec: {
                 P: 1,
                 type: "number",
                 regex: /^(?:[1-9]|1\d|2[0-9]|30)$/,
             },
-            centesimi: {
+            centsec: {
                 P: 2,
                 type: "number",
                 regex: /^(?:[1-9]|[1-9][0-9]|[1-2][0-9]{2}|300)$/,
             },
-            decimi: {
+            decsec: {
                 P: 3,
                 type: "number",
                 regex: /^(?:[1-9]|[1-9]\d{1,2}|[1-2]\d{3}|3000)$/,
@@ -33,24 +34,30 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
                 regex: /^(?:[1-9]|[1-9]\d{1,3}|[1-2]\d{4}|30000)$/,
             },
-            jumpto: {
+            jumpTo: {
                 P: 5,
                 type: "number",
             },
-            async: {
+            synch: {
+                // 0 = Synchronous.The program remains on the current line until the time runs out
+                // 1 = Asynchronous.The timer is initialized then the program continues its execution
                 P: 6,
                 type: "boolean",
             },
             actionStartButton: {
+                // 0 = nothing
+                // 1 = unlock next line
                 P: 7,
                 type: "boolean",
+                regex:/^(0|1)$/,
             },
         },
     },
+
     blindMovement:{
         id: "00002",
         params: {
-            steerPosition: {  
+            steerStartPosition: {  
                 // Steering position at start of movement ( )              
                 //     90 = Straight
                 //     0 = Rotation to the right
@@ -60,12 +67,12 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
                 regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
             },
-            centimetri: {
+            cm: {
                 //Distance/Position expressed in cm
                 P: 2,
                 type: "number",
             },
-            positionStearAfterMovement: {
+            StearAfterMovement: {
                 //Steering position at the end of movement ( )
                 P: 3,
                 type: "number",
@@ -93,7 +100,7 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
                 regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,//0-100
             },
-            positionSecondMotorWheel: {
+            positionSecondMotorWheel_cm: {
                 //Distance/Position expressed in cm (2nd motor wheel)
                 P: 7,
                 type: "number",
@@ -101,10 +108,11 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
+
     moveOnColor:{
         id: "00003",
         params: {
-            Color: {
+            color: {
                 //color 1 = red  ======= MAYBE STRING IS BETTER CHOICE
                 //color 2 = green
                 //color 3 = blue
@@ -112,7 +120,7 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",             
                 regex: /^(0|[1-3])$/,       
             },
-            centimetri: {
+            cm: {
                 //Distance/Position expressed in cm
                 P: 2,
                 type: "number",
@@ -150,17 +158,18 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
                 regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,
             },
-            anticipationNextColor: {
+            anticipNextColor_cm: {
                 // Line change anticipation (cm)
                 P: 7,
                 type: "number",
             },
         },
     },
+
     moveAndChangeColor:{
         id: "00004",
         params: {
-            Color: {
+            color: {
                 //color 1 = red  ======= MAYBE STRING IS BETTER CHOICE
                 //color 2 = green
                 //color 3 = blue
@@ -179,12 +188,12 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            minimalRange: {
+            minRange_cm: {
                 //minimal range cm
                 P: 3,
                 type: "number",
             },
-            maxRange: {
+            maxRange_cm: {
                 //max range cm
                 P: 4,
                 type: "number",
@@ -208,10 +217,11 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
+
     moveOnColorAndSearchPlate:{
         id: "00005",
         params: {
-            Color: {
+            color: {
                 //color 1 = red  ======= MAYBE STRING IS BETTER CHOICE
                 //color 2 = green
                 //color 3 = blue
@@ -219,17 +229,17 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",             
                 regex: /^(0|[1-3])$/,       
             },
-            minimalRange: {
+            minRange_cm: {
                 //minimal range cm
                 P: 2,
                 type: "number",
             },
-            maxRange: {
+            maxRange_cm: {
                 //max range cm
                 P: 3,
                 type: "number",
             },
-            distanceAfterFindPlate: {
+            distanceAfterFindPlate_cm: {
                 // Distance to travel after finding the plate (mm) 
                 // (if greater than 30000 example 30047-30000 = 47 vr(47) = movement from VR)
                 P: 4,
@@ -247,13 +257,14 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
                 regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,
             },
-            speedDuringSearch: {
+            speedDuringSearch_cm: {
                 // Line change anticipation (cm)
                 P: 7,
                 type: "number",
             },
         },
     },
+
     jumpList:{
         id: "00007",
         params: {
@@ -263,34 +274,9 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",    
                 regex: /^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,//1-192             
             },
-            LineToJump: {
+            lineToJump: {
                 //line programmam for VrP1
                 P: 2,
-                type: "number",
-            },
-            free3: {
-                //line programmam for VrP1
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                //line programmam for VrP1
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                //line programmam for VrP1
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                //line programmam for VrP1
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                //line programmam for VrP1
-                P: 7,
                 type: "number",
             },
         },
@@ -299,7 +285,7 @@ export const funcToId: Record<string, SysFunction> = {
     waitVariable:{//Wait for/check entry
         id: "00008",
         params: {
-            inputSignal: {
+            inputSignalPlc: {
                 //Example  I1.0=10  I4.7=47
                 //If =0 waith start button
                 P: 1,                       
@@ -311,7 +297,7 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            timeOutWait: {//seconds
+            timeOutSec: {//seconds
                 P: 3,
                 type: "number",
             },
@@ -342,16 +328,17 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
+
     if:{
         id: "00009",
         params: {
-            var: {
+            Vr: {
                 // No. of the variable to test (1-192)
                 P: 1,                       
                 type: "number",  
                 regex:/^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,              
             },
-            constantValue: {//INT comparison value from constant
+            constValue: {//INT comparison value from constant
                 P: 2,
                 type: "number",
             },
@@ -360,7 +347,7 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
                 regex:/^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,
             },
-            comparationType: {
+            comparateType: {
                 // Type of comparison to perform
                 // 1 Var1 = Var2
                 // 2 Var1 <> Var2
@@ -379,7 +366,7 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 5,
                 type: "number",
             },
-            subRoutine: {
+            jumpToLineWhenTrue: {
                 // Jump to line if condition true
                 P: 6,
                 type: "number",
@@ -392,7 +379,8 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    setVar:{
+
+    setVr:{
         id: "00010",
         params: {
             operationType: {
@@ -414,12 +402,12 @@ export const funcToId: Record<string, SysFunction> = {
                 regex:/^(?:0|[1-9]|1[0-2])$/,              
             },
             //////////////////////////////////////////RENAME NEDED
-            varDestination: {//VarDestionation 65-192
+            vrDest: {//VarDestionation 65-192
                 P: 2,
                 type: "number",
                 regex:/^(?:6[5-9]|7[0-9]|8[0-9]|9[0-9]|1[0-9][0-9]|19[0-2])$/
             },
-            varSorgent1: {//Var1 Source variable 1 (1-192)
+            vrSorgent1: {//Var1 Source variable 1 (1-192)
                 P: 3,
                 type: "number",
                 regex:/^(?:0|[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|1[9][0-9]|19[0-2])$/,
@@ -429,7 +417,7 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
                 
             },
-            varSorgent2: {
+            vrSorgent2: {
                 P: 5,
                 type: "number",
             },
@@ -437,16 +425,13 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 6,
                 type: "number",
             },
-            free: {
-                P: 7,
-                type: "number",
-            },
         },
     },
+
     requestZone:{
         id: "00011",
         params: {
-            WantZone: {
+            wantZone: {
                 P: 1,                       
                 type: "number",                
             },
@@ -454,15 +439,15 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            freeZoneJumpLine: {
+            jumpwhenFree: {
                 P: 3,
                 type: "number",
             },
-            occupedZoneJumpLine: {
+            jumpWhenOccuped: {
                 P: 4,
                 type: "number",
             },
-            aGV99: {
+            AGVV99: {
                 // /with this parameter set to 1 the system assigns the zones to a fictitious AGV (AGV99)
                 P: 5,
                 type: "number",
@@ -479,6 +464,7 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
+
     releaseZone:{
         id: "00012",
         params: {
@@ -490,36 +476,17 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
-        },
+        }
     },
+
     hookCommand:{
         id: "00013",
         params: {
-            timeToOpen: {//sec
+            timeToOpenSec: {//sec
                 P: 1,                       
                 type: "number",                
             },
-            timetoClose: {//sec
+            timetoCloseSec: {//sec
                 P: 2,
                 type: "number",
             },
@@ -537,28 +504,17 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
                 regex:/^(0|1)$/,
             },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
         },
     },
+
     hornControl:{
         id: "00014",
         params: {
-            timeOn: {//sec
+            timeOnSec: {//sec
                 P: 1,                       
                 type: "number",                
             },
-            timeOff: {//sec
+            timeOffSec: {//sec
                 //0 = at the end of Time on I move to the next line
                 P: 2,
                 type: "number",
@@ -576,91 +532,29 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
                 regex:/^(0|1)$/,
             },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
         },
     },
+
     warningUser:{
         id: "00015",
         params: {
-            timeToOpen: {
+            nrTextView: {
                 // No. of text to display (0=Delete)
                 P: 1,                       
                 type: "number",                
             },
-            free2: {
-                P: 2,
-                type: "number",
-            },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
         },
     },
-    stopFlag:{
+
+    stopCycle:{
         id: "00016",
-        params: {
-            free1: {
-                P: 1,                       
-                type: "number",                
-            },
-            free2: {
-                P: 2,
-                type: "number",
-            },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
-        },
+        params: {}
     },
+
     moveWithCrossroad:{//RENAME NEDED
         id: "00017",
         params: {
-            Color: {
+            color: {
                 //color 1 = red  ======= MAYBE STRING IS BETTER CHOICE
                 //color 2 = green
                 //color 3 = blue
@@ -675,7 +569,7 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            minimalPosition: {
+            minPosition: {
                 // Minimum position to reach expressed in cm
                 P: 3,
                 type: "number",
@@ -703,6 +597,7 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
+
     setStatemissionOrNumberPath:{
         id: "00018",
         params: {
@@ -729,7 +624,7 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 5,
                 type: "number",
             },
-            newPositionPath: {//cm
+            newPositionPath_cm: {//cm
                 P: 6,
                 type: "number",
             },
@@ -750,23 +645,7 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            masterForcer: {//NEED RENAME
+            masterForce: {//Rename
                     //Master force (1=M1 2=M2)
                     // 1st digit = Color of M1
                     // 2nd digit = Color of M2
@@ -801,7 +680,7 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 5,
                 type: "number",
             },
-            pieces: {//cm
+            pieces: {
                 P: 6,
                 type: "number",
             },
@@ -830,22 +709,6 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 3,
                 type: "number",
             },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {//cm
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
         },
     },
     moveForwardBackOnColorAndPlaceSearch:{
@@ -859,7 +722,7 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",             
                 regex: /^(0|[1-3])$/,       
             },
-            minimalRange: {
+            minRange: {
                 P: 2,
                 type: "number",
             },
@@ -904,23 +767,11 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            nrVarContaininJumpLine: {
+            nrVarContainJumpLine: {
                 P: 3,
                 type: "number",
             },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {//cm
-                P: 6,
-                type: "number",
-            },
-            End: {
+            elsend: {
                 //reset call vr(26)
                 P: 7,
                 type: "number",
@@ -939,62 +790,13 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {//cm
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
         },
     },
     callBackSubRoutine:{
         id: "00039",
-        params: {
-            free1: {     
-                P: 1,                       
-                type: "number",           
-            },
-            free2: {
-                P: 2,
-                type: "number",
-            },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {//cm
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
-        },
+        params: {},
     },
-    setVehiclePosition:{//NEED RENAME MAYBE
+    setVehiclePosition:{
         id: "00040",
         params: {
             newPosition: {     
@@ -1021,7 +823,7 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 5,
                 type: "number",
             },
-            free6: {
+            indexNewPos: {
                 // Index for acquiring new position from recovery point table
                 // (if = use P3, P4, P5)
                 P: 6,
@@ -1038,36 +840,7 @@ export const funcToId: Record<string, SysFunction> = {
     },
     autoOff:{
         id: "00041",
-        params: {
-            free1: {     
-                P: 1,                       
-                type: "number",           
-            },
-            free2: {
-                P: 2,
-                type: "number",
-            },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {//cm
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
-        },
+        params: {},
     },
     setLaserArea:{
         id: "00042",
@@ -1101,59 +874,47 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 5,
                 type: "number",
             },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
                 //Note: abort mission disables ultrasound
                 // Note: in manual disables ultrasound
                 // Note: in the semi-automatic menu there is a parameter to set
         },
     },
-    enableOrDisableDevice:{//NEED RENAME ArrowLed
+    enableDevice:{//NEED RENAME ArrowLed
         id: "00043",
         params: {
             enableArrowLeft: {     
                 P: 1,                       
-                type: "number",           
+                type: "boolean",       
             },
             disableArrowLeft: {
                 P: 2,
-                type: "number",
+                type: "boolean",
             },
             enableArrowRight: {
                 P: 3,
-                type: "number",
+                type: "boolean",
             },
             disableArrowRight: {
                 P: 4,
-                type: "number",
+                type: "boolean",
             },
             enableCharger: {
                 P: 5,
-                type: "number",
+                type: "boolean",
             },
             disableCharger: {
                 P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
+                type: "boolean",
             },
             //For P1 and P3 +10000 = AutoOff after Val-10000 (cm)
         },
     },
-    readProductCode:{//VERIFY
+    readProductCode:{
         id: "00044",
         params: {
-            readSynncrhone: {    //TRUE FALSE MAYBE 
+            readSynncrhone: {
                 P: 1,                       
-                type: "number",           
+                type: "boolean",
             },
             timeoutWait: {
                 P: 2,
@@ -1172,14 +933,6 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 5,
                 type: "number",
             },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
         },
     },
     setSpeed:{//NEED RENAME
@@ -1189,7 +942,7 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 1,                       
                 type: "number",           
             },
-            speedmilisecondperseconds: {//    mm/s
+            speed_mm_on_ss: {//    mm/s
                 P: 2,
                 type: "number",
             },
@@ -1205,14 +958,6 @@ export const funcToId: Record<string, SysFunction> = {
             },
             nrLineCallRoutineIfError: {
                 P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
                 type: "number",
             },
             //The first valid parameter is considered
@@ -1231,7 +976,7 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",           
                 regex: /^(0|[1-4])$/,//0-4
             },
-            waitTime: {//seconds
+            waitTimeSec: {//seconds
                 P: 2,
                 type: "number",
             },
@@ -1246,18 +991,6 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 4,
                 type: "number",
                 regex: /^(0|1)$/,     
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
             },
         },
     },
@@ -1294,7 +1027,7 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    waitForOperatorResponse:{//NEED RENAME
+    waitForOperatorResponse:{
         id: "00052",
         params: {
             ifOkJump: {
@@ -1336,36 +1069,7 @@ export const funcToId: Record<string, SysFunction> = {
 
     doorCommand:{
         id: "00053",
-        params: {
-            caracter1: {
-                P: 1,                       
-                type: "number",           
-            },
-            caracter2: {
-                P: 2,
-                type: "number",
-            },
-            caracter3: {
-                P: 3,
-                type: "number",
-            },
-            caracter4: {
-                P: 4,
-                type: "number",
-            },
-            caracter5: {
-                P: 5,
-                type: "number",
-            },
-            caracter6: {
-                P: 6,
-                type: "number",
-            },
-            caracter7: {
-                P: 7,
-                type: "number",
-            },
-        },
+        params: {},
         //The door address is managed by the Logo!
     },
     
@@ -1394,20 +1098,12 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 3,
                 type: "number",
             },
-            timeRotationPinSecond: {
+            timeRotationPinSeconds: {
                 P: 4,
                 type: "number",
             },
             timeRotaionPinMiliseconds: {
                 P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
                 type: "number",
             },
         },
@@ -1421,30 +1117,6 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",           
                 regex: /^(0|[1-9][0-9]?|[1-7][0-9]{2})$/
             },
-            free2: {
-                P: 2,
-                type: "number",
-            },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
         },
         //The positions are zero 90 and 180 only
         //to consider that 90 is the straight wheel.
@@ -1452,53 +1124,17 @@ export const funcToId: Record<string, SysFunction> = {
 
     controLoadOnBoard:{
         id: "00056",
-        params: {
-            free1: {
-                P: 1,                       
-                type: "number",           
-            },
-            free2: {
-                P: 2,
-                type: "number",
-            },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
-        },
+        params: {},
     },
 
-    enableDisableFrontLaser:{//RENAME
+    enableFrontLaser:{//RENAME
         id: "00057",
         params: {
             EnableorDisable: {
                 // 1 = Disable front laser 
                 // 0 = Enable front laser
                 P: 1,                       
-                type: "number",      
-                regex: /^(0|1)$/,
-
-            },
-            free2: {
-                // 0
-                P: 2,
-                type: "number",
+                type: "boolean",    
             },
             readingTreshold1: {
                 P: 3,
@@ -1548,22 +1184,6 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 3,
                 type: "number",
             },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
         },
     },
 
@@ -1578,63 +1198,108 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            free3: {
-                P: 3,
-                type: "number",
-            },
-            free4: {
-                P: 4,
-                type: "number",
-            },
-            free5: {
-                P: 5,
-                type: "number",
-            },
-            free6: {
-                P: 6,
-                type: "number",
-            },
-            free7: {
-                P: 7,
-                type: "number",
-            },
         },
     },
-    SetCartesianParameterMovement:{//RENAME MAYBE
-        id: "00060",
-        params: {
-            CoordonateX: {//cm
-                P: 1,                       
-                type: "number",           
-            },
-            CoordonateY: {//cm
-                P: 2,
-                type: "number",
-            },
-            OrientationO: {
-                P: 3,
-                type: "number",
-            },
-            vrForX: {//if 0 use P1
-                P: 4,
-                type: "number",
-            },
-            vrForY: {//if 0 use P2
-                P: 5,
-                type: "number",
-            },
-            vrForO: {//if 0 use P3
-                P: 6,
-                type: "number",
-            },
-            VrIndexPunctTabel: {
-                //If 0 use P4, P5, P6
-                //If 1000 the data are offsets (rel. movement)
-                P: 7,
-                type: "number",
-            },
-        },
+
+//     blindMovement2:{
+//         id: "00062",
+//         params: {
+//             steerStartPosition: {  
+//                 // Remake
+//                 // -1 =maintain orientation
+//                 P: 1,
+//                 type: "number",
+//             },
+//             cm: {
+//                 //Distance/Position expressed in cm
+//                 P: 2,
+//                 type: "number",
+//             },
+//             StearAfterMovement: {
+//                 //Steering position at the end of movement ( )
+//                 P: 3,
+//                 type: "number",
+//                 regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
+//             },
+//             movementType: {
+//                 // 0 = at the end of the movement the AGV will stop, resetting the position
+//                 // 1 = search for color 1
+//                 // 2 = search for color 2
+//                 // 3 = search for color 3
+//                 // 4 = Reverse movement 
+//                 P: 4,
+//                 type: "number",
+//                 regex: /^(0|[1-4])$/,//0-4
+//             },
+//             laser: {
+//                 //Laser area: set at the beginning of the line
+//                 P: 5,
+//                 type: "number",
+//                 regex: /^(0|[1-8])$/,//0-8
+//             },
+//             speed: {
+//                 //Driving speed
+//                 P: 6,
+//                 type: "number",
+//                 regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,//0-100
+//             },
+//             positionSecondMotorWheel_cm: {
+//                 //Distance/Position expressed in cm (2nd motor wheel)
+//                 P: 7,
+//                 type: "number",
+//                 regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
+//             },
+//         },
+//     },
+AGVOrientation:{
+    id: "00063",
+    params: {
+        steerStartPosition: {  
+                            P: 1,
+                            type: "number",
+                        },
+                        cm: {
+                            //Distance/Position expressed in cm
+                            P: 2,
+                            type: "number",
+                        },
+                        StearAfterMovement: {
+                            //Steering position at the end of movement ( )
+                            P: 3,
+                            type: "number",
+                            regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
+                        },
+                        movementType: {
+                            // 0 = at the end of the movement the AGV will stop, resetting the position
+                            // 1 = 0 but position not resetting
+                            // 2 = the indicated position is not a destination but the position in which the transition to the next program line occurs. The position is not reset
+                            // +1 = The movement of the train is not absolute but relative
+                            // +100 = AGV orientation with triangulation
+                            P: 4,
+                            type: "number",
+                            regex: /^(0|[1-4])$/,//0-4
+                        },
+                        directionOrientation: {
+                            //0 = Automatic (do not use)
+                            //  1 = Counterclockwise
+                            //  2 = Hourly
+                            P: 5,
+                            type: "number",
+                            regex: /^(0|[1-8])$/,//0-8
+                        },
+                        speed: {
+                            //Driving speed
+                            P: 6,
+                            type: "number",
+                            regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,//0-100
+                        },
+                        precisionOrientation: {
+                            P: 7,
+                            type: "number",
+                        },
     },
+},
 };
+
 
 export default { funcToId };
