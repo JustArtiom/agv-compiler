@@ -1,5 +1,17 @@
-// test lmao
-if(Vr=90,valueOfVar=90,comparationType=1,subRoutine=40) 
-    
+// Create variables
+var someName = 15
+var leastDistance = 15
+vat direction = "forward we go fast lmao"
 
-    
+
+// If/Else statement
+if (someName > 14) do
+    wait(seconds=13)
+else
+    wait(seconds=1)
+fi
+
+// While statement
+while (someName <= plc.variable) do
+    move(direction, centimeters=13)
+wend

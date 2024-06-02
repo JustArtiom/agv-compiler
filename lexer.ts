@@ -1,239 +1,156 @@
-export enum TokenType {
-    Comment,
-    Number,
-    Boolean,
-    Identifier,
-    Equals,
-    Comma,
-    OpenParen,
-    CloseParen,
-    SysFunction,
-}
+import { TokenType, Token, KEYWORDS, AgvError } from "./utils";
+import path from "node:path";
 
-export interface Token {
-    value: string;
-    type: TokenType;
-}
-
-export const KEYWORDS: Record<string, TokenType> = {
-    wait: TokenType.SysFunction,
-    blindMovement:TokenType.SysFunction,
-    MoveonColor:TokenType.SysFunction,
-    moveAndChangeColor:TokenType.SysFunction,
-    moveOnColorAndSearchPlate:TokenType.SysFunction,
-    jumpList:TokenType.SysFunction,
-    waitVariable:TokenType.SysFunction,
-    if:TokenType.SysFunction,
-    setVar:TokenType.SysFunction,
-    requestZone:TokenType.SysFunction,
-    releaseZone:TokenType.SysFunction,
-    hookCommand:TokenType.SysFunction,
-    hornControl:TokenType.SysFunction,
-    warningUser:TokenType.SysFunction,
-    stopFlag:TokenType.SysFunction,
-    moveWithCrossroad:TokenType.SysFunction,
-    setStatemissionOrNumberPath:TokenType.SysFunction,
-    detectAgvOrientationandColor:TokenType.SysFunction,
-    sendMasterCall:TokenType.SysFunction,
-    setOutputPlc:TokenType.SysFunction,
-    moveForwardBackOnColorAndPlaceSearch:TokenType.SysFunction,
-    jumpToLine:TokenType.SysFunction,
-    subRoutineCall:TokenType.SysFunction,
-    callBackSubRoutine:TokenType.SysFunction,
-    setVehiclePosition:TokenType.SysFunction,
-    autoOff:TokenType.SysFunction,
-    setLaserArea:TokenType.SysFunction,
-    enableOrDisableDevice:TokenType.SysFunction,
-    readProductCode:TokenType.SysFunction,
-    setSpeed:TokenType.SysFunction,
-    waitMission:TokenType.SysFunction,
-    viewString:TokenType.SysFunction,
-    waitForOperatorResponsev:TokenType.SysFunction,
-    doorCommand:TokenType.SysFunction,
-    hookCart:TokenType.SysFunction,
-    setRearWheels:TokenType.SysFunction,
-    controLoadOnBoard:TokenType.SysFunction,
-    enableDisableFrontLaser:TokenType.SysFunction,
-    forkCommand:TokenType.SysFunction,
-    tractionControl:TokenType.SysFunction,
-    SetCartesianParameterMovement:TokenType.SysFunction,
-    true: TokenType.Boolean,
-    false: TokenType.Boolean,
-};
-
-export function getTokenTypeString(type: TokenType): string {
-    for (const key in TokenType) {
-        const enumValue = TokenType[key as keyof typeof TokenType];
-        if (enumValue === type) {
-            return key;
-        }
-    }
-    return "Unknown";
-}
-
-export function token(value: string, type: TokenType): Token {
-    return { value, type };
-}
-
-export function isComment(str: string): boolean {
-    return str == "/";
-}
-
-export function isAlpha(str: string): boolean {
-    return /^[A-Za-z]+$/.test(str);
-}
-
-export function isInt(str: string): boolean {
-    return /^-?\d+$/.test(str);
-}
-
-export function isSkippable(str: string): boolean {
-    return str == " " || str == "\n" || str == "\t" || str == "\r";
-}
-
-export function tokenize(sourceCode: string): Token[] {
+export function tokenize(sourceCode: string, fPath: string): Token[] {
     const tokens = new Array<Token>();
     const src = sourceCode.split("");
 
+    let line = 1;
+    let column = 1;
+
     while (src.length > 0) {
-        if (src[0] == "(")
-            tokens.push(token(src.shift()!, TokenType.OpenParen));
-        else if (src[0] == ")")
-            tokens.push(token(src.shift()!, TokenType.CloseParen));
-        else if (src[0] == "=")
-            tokens.push(token(src.shift()!, TokenType.Equals));
-        else if (src[0] == ",")
-            tokens.push(token(src.shift()!, TokenType.Comma));
-        else {
-            if (isComment(src[0])) {
-                let ident = "";
-                while (
-                    src.length > 0 &&
-                    (isComment(src[0]) || ident.startsWith("//")) &&
-                    !ident.endsWith("\n")
-                ) {
-                    ident += src.shift();
-                }
+        const tkn = src.shift()!;
 
-                tokens.push(token(ident.trim(), TokenType.Comment));
-            } else if (isInt(src[0])) {
-                let num = "";
-                while (src.length > 0 && isInt(src[0])) {
-                    num += src.shift();
-                }
+        column++;
+        if (tkn === "\n") {
+            line++;
+            column = 1;
+        }
 
-                tokens.push(token(num, TokenType.Number));
-            } else if (isAlpha(src[0])) {
-                let ident = "";
-                while (src.length > 0 && isAlpha(src[0])) {
-                    ident += src.shift();
-                }
+        if (tkn == "/" && src[0] == "/") {
+            let comment = tkn;
 
-                const reserved = KEYWORDS[ident];
-                if (reserved) tokens.push(token(ident, reserved));
-                else tokens.push(token(ident, TokenType.Identifier));
-            } else if (isSkippable(src[0])) {
-                src.shift();
-            } else {
-                throw new Error(
-                    `Unrecognized character found by the lexer: ${src[0]}`
-                );
+            // @ts-expect-error No overlap occurs since i am shifting form the string
+            while (src.length && src[0] !== "\n") {
+                comment += src.shift();
             }
+
+            tokens.push(token(comment.trim(), TokenType.Comment));
+        } else if (tkn == "(") {
+            tokens.push(token(tkn, TokenType.OpenParen));
+        } else if (tkn == ")") {
+            tokens.push(token(tkn, TokenType.CloseParen));
+        } else if (tkn == ",") {
+            tokens.push(token(tkn, TokenType.Comma));
+        } else if (tkn == ".") {
+            tokens.push(token(tkn, TokenType.Dot));
+        } else if (src.length && tkn == '"') {
+            let string = "";
+
+            const beforeProcess = { line, column };
+
+            while (src[0] !== '"') {
+                if (!src.length) {
+                    console.error(
+                        new AgvError(
+                            "Unfinished string detected. Did you forget to add a quotation?",
+                            {
+                                fPath: __filename,
+                                line: beforeProcess.line,
+                                column: beforeProcess.column,
+                                code: sourceCode.split("\n")[
+                                    beforeProcess.line - 1
+                                ],
+                            }
+                        )
+                            .addStack("AGVCompiler.lexer.tokenize", __filename)
+                            .addStack(
+                                "AGVCompiler.userInput",
+                                `${path.resolve(fPath)}:${line}:${column}`
+                            )
+                    );
+                    process.exit(1);
+                }
+                string += src.shift();
+                column++;
+            }
+
+            src.shift();
+            column++;
+
+            tokens.push(token(string, TokenType.String));
+        } else if (tkn == "=") {
+            if (src[0] == "=") {
+                src.shift();
+                column++;
+                tokens.push(token("==", TokenType.DoubleEquals));
+            } else tokens.push(token(tkn, TokenType.Equals));
+        } else if (tkn == ">") {
+            if (src[0] == "=") {
+                src.shift();
+                column++;
+                tokens.push(token(">=", TokenType.GreaterEqual));
+            } else tokens.push(token(tkn, TokenType.Greater));
+        } else if (tkn == "<") {
+            if (src[0] == "=") {
+                src.shift();
+                column++;
+                tokens.push(token("<=", TokenType.LessEqual));
+            } else tokens.push(token(tkn, TokenType.Less));
+        } else if (isSkippable(tkn)) {
+        } else if (isInt(tkn)) {
+            let num = tkn;
+            while (src.length && isInt(src[0])) {
+                num += src.shift();
+                column++;
+            }
+
+            tokens.push(token(num, TokenType.Number));
+        } else if (isAlpha(tkn)) {
+            let ident = tkn;
+            while (src.length && isAlpha(src[0])) {
+                ident += src.shift();
+                column++;
+            }
+
+            const reserved = KEYWORDS[ident];
+            if (reserved) tokens.push(token(ident, reserved));
+            else tokens.push(token(ident, TokenType.Identifier));
+        } else {
+            console.error(
+                new AgvError("Unrecognized token found", {
+                    fPath: __filename,
+                    line,
+                    column,
+                    code: sourceCode.split("\n")[line - 1],
+                })
+                    .addStack("AGVCompiler.lexer.tokenize", __filename)
+                    .addStack(
+                        "AGVCompiler.userInput",
+                        `${path.resolve(fPath)}:${line}:${column}`
+                    )
+            );
+            process.exit(1);
         }
     }
 
     return tokens;
 }
 
-export const expect = (token: Token, tokenType: TokenType) =>
-    token?.type == tokenType;
-
-export interface ParsedFunction {
-    funcName: string;
-    params: Record<string, { value: string; type: TokenType }>;
+function getErrorContext(lineText: string, errorColumn: number): string {
+    const start = Math.max(0, errorColumn - 60 - 1);
+    const end = Math.min(lineText.length, errorColumn + 60);
+    const context = lineText.slice(start, end);
+    const marker = " ".repeat(errorColumn - start - 1) + "^";
+    return `${context}\n${marker}`;
 }
 
-export const parseTokens = (tokens: Token[]): ParsedFunction => {
-    const parsedFunction: ParsedFunction = { funcName: "", params: {} };
+function token(value: string, type: TokenType): Token {
+    return { value, type };
+}
 
-    let loadingParam = "";
-    let paramCollector = false;
-    let expectedTokens: TokenType[] = [];
+function isAlpha(str: string): boolean {
+    return /^[A-Za-z]+$/.test(str);
+}
 
-    for (const token of tokens) {
-        if (paramCollector) {
-            if (!tokens.find((x) => x.type === TokenType.CloseParen))
-                throw new Error(`Did you forgot to close the parenthesis?`);
-            if (expectedTokens.length && !expectedTokens.includes(token.type))
-                throw new Error(
-                    `Unexpected token while expecting parameter. Expected ${expectedTokens
-                        .map((x) => `"${getTokenTypeString(x)}"`)
-                        .join(", ")} but received "${getTokenTypeString(
-                        token.type
-                    )}"`
-                );
-            if (token.type == TokenType.OpenParen) {
-                expectedTokens = [TokenType.Identifier, TokenType.CloseParen];
-            }
-            if (token.type == TokenType.Identifier) {
-                expectedTokens = [TokenType.Equals];
-                loadingParam = token.value;
-            }
-            if (token.type == TokenType.Equals) {
-                expectedTokens = [TokenType.Number, TokenType.Boolean];
-            }
-            if ([TokenType.Number, TokenType.Boolean].includes(token.type)) {
-                expectedTokens = [TokenType.Comma, TokenType.CloseParen];
-                parsedFunction.params[loadingParam] = token;
-                loadingParam = "";
-            }
-            if (token.type == TokenType.Comma) {
-                expectedTokens = [TokenType.Identifier];
-            }
-            if (token.type == TokenType.CloseParen) {
-                expectedTokens = [];
-            }
-        } else {
-            if (token.type === TokenType.SysFunction) {
-                parsedFunction.funcName = token.value;
-                expectedTokens = [TokenType.OpenParen];
-                paramCollector = true;
-            }
-        }
-    }
+function isInt(str: string): boolean {
+    return /^-?\d+$/.test(str);
+}
 
-    return parsedFunction;
-};
-
-export const parseDataTypes = <T = any>(token: Token): T => {
-    if (token.type == TokenType.Boolean) {
-        if (token.value == "true") {
-            return true as T;
-        } else if (token.value == "false") {
-            return false as T;
-        } else {
-            throw new Error(
-                `Invalid data when parsing. Data type was declared "${token.type}" but the value was "${token.value}"`
-            );
-        }
-    }
-
-    if (token.type == TokenType.Number) {
-        const toReturn = Number(token.value);
-
-        if (!toReturn)
-            throw new Error(
-                `Invalid data when parsing. Data type was declared "${token.type}" but the value was "${token.value}"`
-            );
-        return toReturn as T;
-    }
-
-    return token.value as T;
-};
+function isSkippable(str: string): boolean {
+    return str == " " || str == "\n" || str == "\t" || str == "\r";
+}
 
 export default {
     tokenize,
-    parseDataTypes,
-    TokenType,
-    parseTokens,
 };
