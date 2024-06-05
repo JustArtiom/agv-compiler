@@ -18,14 +18,10 @@ export function tokenize(sourceCode: string, fPath: string): Token[] {
         }
 
         if (tkn == "/" && src[0] == "/") {
-            let comment = tkn;
-
             // @ts-expect-error No overlap occurs since i am shifting form the string
             while (src.length && src[0] !== "\n") {
-                comment += src.shift();
+                src.shift();
             }
-
-            tokens.push(token(comment.trim(), TokenType.Comment));
         } else if (tkn == "(") {
             tokens.push(token(tkn, TokenType.OpenParen));
         } else if (tkn == ")") {

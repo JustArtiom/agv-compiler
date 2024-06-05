@@ -1,8 +1,9 @@
 import { tokenize } from "./lexer";
-import { compileToPLC } from "./compiler";
 import fs from "node:fs";
-
+import { parser } from "./parser";
+import util from "node:util";
 const filePath = "./code.agv";
 const code = fs.readFileSync(filePath, "utf-8");
-
-console.log(tokenize(code, filePath));
+const tokens = tokenize(code, filePath);
+const ast = parser(tokens, filePath);
+console.log(JSON.stringify(ast, null, 2));

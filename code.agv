@@ -1,17 +1,19 @@
 // Create variables
 var someName = 15
 var leastDistance = 15
-vat direction = "forward we go fast lmao"
+var direction = "forward we go fast lmao"
 
+wait(seconds=3, test=someName)
 
-// If/Else statement
-if (someName > 14) do
+// If / Else statement
+if someName > 3213 do
     wait(seconds=13)
+    move(distance=3)
 else
     wait(seconds=1)
-fi
+
 
 // While statement
-while (someName <= plc.variable) do
-    move(direction, centimeters=13)
-wend
+// while (someName <= somename) do
+//     move(direction=direction, centimeters=13)
+// wend

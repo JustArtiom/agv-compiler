@@ -1,10 +1,15 @@
 export enum TokenType {
+    // Comments
     Comment,
+
+    // Types and variables
     Var,
+    Identifier,
     Number,
     Boolean,
     String,
-    Identifier,
+
+    // Binary operators
     Equals,
     DoubleEquals,
     Greater,
@@ -13,16 +18,28 @@ export enum TokenType {
     LessEqual,
     NotEqual,
     Exclamation,
+
+    // Syntax
     Comma,
     Dot,
     OpenParen,
     CloseParen,
+
+    // Logic
     If,
     Do,
     Fi,
     Else,
     While,
     Wend,
+    func,
+    cnuf,
+}
+
+export function getTokenTypeName(value: TokenType) {
+    return Object.keys(TokenType).find(
+        (key: string) => TokenType[key as keyof typeof TokenType] === value
+    )!;
 }
 
 export interface Token {
@@ -40,6 +57,8 @@ export const KEYWORDS: Record<string, TokenType> = {
     else: TokenType.Else,
     while: TokenType.While,
     wend: TokenType.Wend,
+    func: TokenType.func,
+    cnuf: TokenType.cnuf,
 };
 
 export interface AgvErrorOptions {
@@ -55,6 +74,7 @@ export class AgvError {
         { fPath, code, line, column }: AgvErrorOptions = {}
     ) {
         this.error = `Error: ${error}`;
+        this.addStack("at AGVCompiler", "as runMain");
 
         this.fPath = fPath || __filename;
         if (line && column) {
@@ -68,7 +88,7 @@ export class AgvError {
     fPath!: string;
     code?: string;
     error!: string;
-    stackErrors: string[] = ["at AGVCompiler [as runMain]"];
+    stackErrors: string[] = [];
 
     private getErrorContextVisualization(
         lineText: string,
@@ -79,6 +99,11 @@ export class AgvError {
         const context = lineText.slice(start, end);
         const marker = " ".repeat(errorColumn - start - 1) + "^";
         return `${context}\n${marker}`;
+    }
+
+    setError(name: string) {
+        this.error = name;
+        return this;
     }
 
     addStack(func: string, path?: string): this {
@@ -99,4 +124,55 @@ export class AgvError {
     [require("util").inspect.custom]() {
         return this.toString();
     }
+}
+
+// AST
+export interface ASTNode {
+    type: string;
+}
+
+export interface VariableDeclaration extends ASTNode {
+    type: "VariableDeclaration";
+    name: string;
+    value: any;
+}
+
+export interface IfStatement extends ASTNode {
+    type: "IfStatement";
+    condition: ASTNode;
+    consequent: ASTNode[];
+    alternate: ASTNode[];
+}
+
+export interface WhileStatement extends ASTNode {
+    type: "WhileStatement";
+    condition: ASTNode;
+    body: ASTNode[];
+}
+
+export interface Condition extends ASTNode {
+    type: "Condition";
+    left: ASTNode;
+    operator: string;
+    right: ASTNode;
+}
+
+export interface Identifier extends ASTNode {
+    type: "Identifier";
+    name: string;
+}
+
+export interface Literal extends ASTNode {
+    type: "Literal";
+    value: any;
+}
+
+export interface FuncCall extends ASTNode {
+    type: "FunctionCall";
+    name: string;
+    parameters: Record<string, Literal>[];
+}
+
+export function createNode(type: string, props: object): ASTNode {
+    return { type, ...props };
 }
