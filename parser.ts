@@ -1,7 +1,7 @@
 import {
     ASTNode,
     AgvError,
-    Token,
+    Token, 
     TokenType,
     createNode,
     getTokenTypeName,
@@ -233,7 +233,7 @@ export function parser(tokens: Token[], fname: string): ASTNode[] {
     let ast: ASTNode[] = [];
     while (current < tokens.length) {
         const job = walk();
-        console.log(job);
+        //console.log(job);
         if (job) ast.push(job);
     }
 
