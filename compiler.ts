@@ -1,21 +1,24 @@
 import agv, { funcToId } from "./agv";
 import { anyASTNode } from "./utils";
-export const compile = (astList: anyASTNode[]) => {
-    let compiled = [];
+export const compile = (astList: anyASTNode[]): string[][] => {
+    let compiled: string[][] = [];
 
     while (astList.length) {
         const element = astList.shift()!;
 
         if (element.type == "IfStatement") {
-            console.log(element);
+            /** @todo */
+            /** @todo */
+            /** @todo */
+            /** @todo */
+            /** @todo */
 
-            compile(element.consequent);
+            const ifBodyCompiled = compile(element.consequent);
 
-            /** @todo */
-            /** @todo */
-            /** @todo */
-            /** @todo */
-            /** @todo */
+            for (const compiled of ifBodyCompiled) {
+                // append 1 if statement
+                // append the compiled line
+            }
 
             continue;
         }
