@@ -1,1 +1,11 @@
-wait(seconds=3, test=someName)
+wait(
+    seconds=3, 
+    synch=false
+)
+wait(synch=true)
+
+AGVOrientation(steerStartPosition="front")
+
+if 3 > 2 do
+    wait(synch=true)
+fi

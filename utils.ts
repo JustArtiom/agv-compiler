@@ -139,15 +139,15 @@ export interface VariableDeclaration extends ASTNode {
 
 export interface IfStatement extends ASTNode {
     type: "IfStatement";
-    condition: ASTNode;
-    consequent: ASTNode[];
-    alternate: ASTNode[];
+    condition: Condition;
+    consequent: anyASTNode[];
+    alternate: anyASTNode[];
 }
 
 export interface WhileStatement extends ASTNode {
     type: "WhileStatement";
-    condition: ASTNode;
-    body: ASTNode[];
+    condition: Condition;
+    body: anyASTNode[];
 }
 
 export interface Condition extends ASTNode {
@@ -164,15 +164,27 @@ export interface Identifier extends ASTNode {
 
 export interface Literal extends ASTNode {
     type: "Literal";
-    value: any;
+    value: string;
 }
 
 export interface FuncCall extends ASTNode {
     type: "FunctionCall";
     name: string;
-    parameters: Record<string, Literal>[];
+    parameters: Record<string, Literal>;
 }
 
-export function createNode(type: string, props: object): ASTNode {
-    return { type, ...props };
+export type anyASTNode =
+    | FuncCall
+    | Literal
+    | Identifier
+    | Condition
+    | WhileStatement
+    | IfStatement
+    | VariableDeclaration;
+
+export function createNode<T extends anyASTNode>(
+    type: T["type"],
+    props: Omit<T, "type">
+): T {
+    return { type, ...props } as T;
 }

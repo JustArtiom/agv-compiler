@@ -64,7 +64,18 @@ export function tokenize(sourceCode: string, fPath: string): Token[] {
             src.shift();
             column++;
 
-            tokens.push(token(string, TokenType.String));
+            tokens.push(
+                token(
+                    string == "left"
+                        ? "0"
+                        : string == "front"
+                        ? "90"
+                        : string == "right"
+                        ? "180"
+                        : string,
+                    TokenType.String
+                )
+            );
         } else if (tkn == "=") {
             if (src[0] == "=") {
                 src.shift();
@@ -100,8 +111,13 @@ export function tokenize(sourceCode: string, fPath: string): Token[] {
             }
 
             const reserved = KEYWORDS[ident];
-            if (reserved) tokens.push(token(ident, reserved));
-            else tokens.push(token(ident, TokenType.Identifier));
+            if (reserved) {
+                if (reserved === TokenType.Boolean) {
+                    tokens.push(token(ident == "true" ? "1" : "0", reserved));
+                } else {
+                    tokens.push(token(ident, reserved));
+                }
+            } else tokens.push(token(ident, TokenType.Identifier));
         } else {
             console.error(
                 new AgvError("Unrecognized token found", {
@@ -121,14 +137,6 @@ export function tokenize(sourceCode: string, fPath: string): Token[] {
     }
 
     return tokens;
-}
-
-function getErrorContext(lineText: string, errorColumn: number): string {
-    const start = Math.max(0, errorColumn - 60 - 1);
-    const end = Math.min(lineText.length, errorColumn + 60);
-    const context = lineText.slice(start, end);
-    const marker = " ".repeat(errorColumn - start - 1) + "^";
-    return `${context}\n${marker}`;
 }
 
 function token(value: string, type: TokenType): Token {

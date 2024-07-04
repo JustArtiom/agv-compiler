@@ -1,8 +1,10 @@
 import {
     ASTNode,
     AgvError,
-    Token, 
+    Condition,
+    Token,
     TokenType,
+    anyASTNode,
     createNode,
     getTokenTypeName,
 } from "./utils";
@@ -32,12 +34,12 @@ const expectToken = (
     process.exit(1);
 };
 
-export function parser(tokens: Token[], fname: string): ASTNode[] {
+export function parser(tokens: Token[], fname: string): anyASTNode[] {
     let current = 0;
 
     const getTkn = () => tokens[current];
 
-    function walk(): ASTNode | undefined {
+    function walk(): anyASTNode | undefined {
         let token = getTkn();
 
         if (
@@ -152,7 +154,7 @@ export function parser(tokens: Token[], fname: string): ASTNode[] {
 
                 return createNode("FunctionCall", {
                     name: token.value,
-                    params: params,
+                    parameters: params,
                 });
             }
 
@@ -230,10 +232,9 @@ export function parser(tokens: Token[], fname: string): ASTNode[] {
         process.exit(1);
     }
 
-    let ast: ASTNode[] = [];
+    let ast: anyASTNode[] = [];
     while (current < tokens.length) {
         const job = walk();
-        //console.log(job);
         if (job) ast.push(job);
     }
 

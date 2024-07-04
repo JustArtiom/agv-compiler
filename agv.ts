@@ -10,7 +10,6 @@ export interface SysFunction {
 }
 
 export const funcToId: Record<string, SysFunction> = {
-
     wait: {
         id: "00001",
         params: {
@@ -49,23 +48,23 @@ export const funcToId: Record<string, SysFunction> = {
                 // 1 = unlock next line
                 P: 7,
                 type: "boolean",
-                regex:/^(0|1)$/,
+                regex: /^(0|1)$/,
             },
         },
     },
 
-    blindMovement:{
+    blindMovement: {
         id: "00002",
         params: {
-            steerStartPosition: {  
-                // Steering position at start of movement ( )              
+            steerStartPosition: {
+                // Steering position at start of movement ( )
                 //     90 = Straight
                 //     0 = Rotation to the right
-                //     180 = Rotation to the left 
-                //     <0 or >180 = Maintain current orientation     
+                //     180 = Rotation to the left
+                //     <0 or >180 = Maintain current orientation
                 P: 1,
                 type: "number",
-                regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
+                regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/, //0-360
             },
             cm: {
                 //Distance/Position expressed in cm
@@ -76,49 +75,49 @@ export const funcToId: Record<string, SysFunction> = {
                 //Steering position at the end of movement ( )
                 P: 3,
                 type: "number",
-                regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
+                regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/, //0-360
             },
             movementType: {
                 // 0 = at the end of the movement the AGV will stop, resetting the position
                 // 1 = search for color 1
                 // 2 = search for color 2
                 // 3 = search for color 3
-                // 4 = Reverse movement 
+                // 4 = Reverse movement
                 P: 4,
                 type: "number",
-                regex: /^(0|[1-4])$/,//0-4
+                regex: /^(0|[1-4])$/, //0-4
             },
             laser: {
                 //Laser area: set at the beginning of the line
                 P: 5,
                 type: "number",
-                regex: /^(0|[1-8])$/,//0-8
+                regex: /^(0|[1-8])$/, //0-8
             },
             speed: {
                 //Driving speed
                 P: 6,
                 type: "number",
-                regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,//0-100
+                regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/, //0-100
             },
             positionSecondMotorWheel_cm: {
                 //Distance/Position expressed in cm (2nd motor wheel)
                 P: 7,
                 type: "number",
-                regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
+                regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/, //0-360
             },
         },
     },
 
-    moveOnColor:{
+    moveOnColor: {
         id: "00003",
         params: {
             color: {
                 //color 1 = red  ======= MAYBE STRING IS BETTER CHOICE
                 //color 2 = green
                 //color 3 = blue
-                P: 1,                       
-                type: "number",             
-                regex: /^(0|[1-3])$/,       
+                P: 1,
+                type: "number",
+                regex: /^(0|[1-3])$/,
             },
             cm: {
                 //Distance/Position expressed in cm
@@ -166,25 +165,25 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    moveAndChangeColor:{
+    moveAndChangeColor: {
         id: "00004",
         params: {
             color: {
                 //color 1 = red  ======= MAYBE STRING IS BETTER CHOICE
                 //color 2 = green
                 //color 3 = blue
-                P: 1,                       
-                type: "number",             
-                regex: /^(0|[1-3])$/,       
+                P: 1,
+                type: "number",
+                regex: /^(0|[1-3])$/,
             },
             MovementType: {
-               //+100 Invert master compared to last acquisition (CMD19)
-               //  +200 Twin Tow Move
-               //  +400 Opposite movement of the tow
-               //  +800 Twin steering movement
-               //  +1600 Opposite steering movement
-               //  +3200 Lateral movement (disables speed reduction for steering position)
-               // +6400 Use dual cameras
+                //+100 Invert master compared to last acquisition (CMD19)
+                //  +200 Twin Tow Move
+                //  +400 Opposite movement of the tow
+                //  +800 Twin steering movement
+                //  +1600 Opposite steering movement
+                //  +3200 Lateral movement (disables speed reduction for steering position)
+                // +6400 Use dual cameras
                 P: 2,
                 type: "number",
             },
@@ -218,16 +217,16 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    moveOnColorAndSearchPlate:{
+    moveOnColorAndSearchPlate: {
         id: "00005",
         params: {
             color: {
                 //color 1 = red  ======= MAYBE STRING IS BETTER CHOICE
                 //color 2 = green
                 //color 3 = blue
-                P: 1,                       
-                type: "number",             
-                regex: /^(0|[1-3])$/,       
+                P: 1,
+                type: "number",
+                regex: /^(0|[1-3])$/,
             },
             minRange_cm: {
                 //minimal range cm
@@ -240,7 +239,7 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
             },
             distanceAfterFindPlate_cm: {
-                // Distance to travel after finding the plate (mm) 
+                // Distance to travel after finding the plate (mm)
                 // (if greater than 30000 example 30047-30000 = 47 vr(47) = movement from VR)
                 P: 4,
                 type: "number",
@@ -265,14 +264,14 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    jumpList:{
+    jumpList: {
         id: "00007",
         params: {
             Vr: {
                 //Variable to test
-                P: 1,                       
-                type: "number",    
-                regex: /^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,//1-192             
+                P: 1,
+                type: "number",
+                regex: /^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/, //1-192
             },
             lineToJump: {
                 //line programmam for VrP1
@@ -282,14 +281,15 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    waitVariable:{//Wait for/check entry
+    waitVariable: {
+        //Wait for/check entry
         id: "00008",
         params: {
             inputSignalPlc: {
                 //Example  I1.0=10  I4.7=47
                 //If =0 waith start button
-                P: 1,                       
-                type: "number",                
+                P: 1,
+                type: "number",
             },
             state: {
                 // 0 = off
@@ -297,7 +297,8 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 2,
                 type: "number",
             },
-            timeOutSec: {//seconds
+            timeOutSec: {
+                //seconds
                 P: 3,
                 type: "number",
             },
@@ -329,23 +330,25 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    if:{
+    if: {
         id: "00009",
         params: {
             Vr: {
                 // No. of the variable to test (1-192)
-                P: 1,                       
-                type: "number",  
-                regex:/^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,              
+                P: 1,
+                type: "number",
+                regex: /^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,
             },
-            constValue: {//INT comparison value from constant
+            constValue: {
+                //INT comparison value from constant
                 P: 2,
                 type: "number",
             },
-            valueOfVar: {//Value from variable (1-192) if P3 = 0 P2 is used
+            valueOfVar: {
+                //Value from variable (1-192) if P3 = 0 P2 is used
                 P: 3,
                 type: "number",
-                regex:/^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,
+                regex: /^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,
             },
             comparateType: {
                 // Type of comparison to perform
@@ -380,7 +383,7 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    setVr:{
+    setVr: {
         id: "00010",
         params: {
             operationType: {
@@ -397,25 +400,27 @@ export const funcToId: Record<string, SysFunction> = {
                 // 10 = OR Word
                 // 11 = XOR Word
                 // 12 = MOD
-                P: 1,                       
-                type: "number",  
-                regex:/^(?:0|[1-9]|1[0-2])$/,              
+                P: 1,
+                type: "number",
+                regex: /^(?:0|[1-9]|1[0-2])$/,
             },
             //////////////////////////////////////////RENAME NEDED
-            vrDest: {//VarDestionation 65-192
+            vrDest: {
+                //VarDestionation 65-192
                 P: 2,
                 type: "number",
-                regex:/^(?:6[5-9]|7[0-9]|8[0-9]|9[0-9]|1[0-9][0-9]|19[0-2])$/
+                regex: /^(?:6[5-9]|7[0-9]|8[0-9]|9[0-9]|1[0-9][0-9]|19[0-2])$/,
             },
-            vrSorgent1: {//Var1 Source variable 1 (1-192)
+            vrSorgent1: {
+                //Var1 Source variable 1 (1-192)
                 P: 3,
                 type: "number",
-                regex:/^(?:0|[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|1[9][0-9]|19[0-2])$/,
+                regex: /^(?:0|[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|1[9][0-9]|19[0-2])$/,
             },
-            constValue1: {//Cost1 Constant value if Var1=0
+            constValue1: {
+                //Cost1 Constant value if Var1=0
                 P: 4,
                 type: "number",
-                
             },
             vrSorgent2: {
                 P: 5,
@@ -428,12 +433,12 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    requestZone:{
+    requestZone: {
         id: "00011",
         params: {
             wantZone: {
-                P: 1,                       
-                type: "number",                
+                P: 1,
+                type: "number",
             },
             nrVar: {
                 P: 2,
@@ -465,32 +470,35 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    releaseZone:{
+    releaseZone: {
         id: "00012",
         params: {
-            numberZone: {//Nr. Zone that is being released
-                P: 1,                       
-                type: "number",                
+            numberZone: {
+                //Nr. Zone that is being released
+                P: 1,
+                type: "number",
             },
             nrVarcontainZone: {
                 P: 2,
                 type: "number",
             },
-        }
+        },
     },
 
-    hookCommand:{
+    hookCommand: {
         id: "00013",
         params: {
-            timeToOpenSec: {//sec
-                P: 1,                       
-                type: "number",                
+            timeToOpenSec: {
+                //sec
+                P: 1,
+                type: "number",
             },
-            timetoCloseSec: {//sec
+            timetoCloseSec: {
+                //sec
                 P: 2,
                 type: "number",
             },
-            WaitSensorOpen: {  
+            WaitSensorOpen: {
                 // If 0 I just wait time
                 // If 1 I wait time after sensor
                 P: 3,
@@ -502,24 +510,26 @@ export const funcToId: Record<string, SysFunction> = {
                 // If 1 I wait time after sensor
                 P: 4,
                 type: "number",
-                regex:/^(0|1)$/,
+                regex: /^(0|1)$/,
             },
         },
     },
 
-    hornControl:{
+    hornControl: {
         id: "00014",
         params: {
-            timeOnSec: {//sec
-                P: 1,                       
-                type: "number",                
+            timeOnSec: {
+                //sec
+                P: 1,
+                type: "number",
             },
-            timeOffSec: {//sec
+            timeOffSec: {
+                //sec
                 //0 = at the end of Time on I move to the next line
                 P: 2,
                 type: "number",
             },
-            numberRepetition: {  
+            numberRepetition: {
                 //No. Repetitions (0 = non stop I immediately move to the next row)
                 P: 3,
                 type: "number",
@@ -530,37 +540,38 @@ export const funcToId: Record<string, SysFunction> = {
                 // If non-stop repetitions, asynchronous command is forced
                 P: 4,
                 type: "number",
-                regex:/^(0|1)$/,
+                regex: /^(0|1)$/,
             },
         },
     },
 
-    warningUser:{
+    warningUser: {
         id: "00015",
         params: {
             nrTextView: {
                 // No. of text to display (0=Delete)
-                P: 1,                       
-                type: "number",                
+                P: 1,
+                type: "number",
             },
         },
     },
 
-    stopCycle:{
+    stopCycle: {
         id: "00016",
-        params: {}
+        params: {},
     },
 
-    moveWithCrossroad:{//RENAME NEDED
+    moveWithCrossroad: {
+        //RENAME NEDED
         id: "00017",
         params: {
             color: {
                 //color 1 = red  ======= MAYBE STRING IS BETTER CHOICE
                 //color 2 = green
                 //color 3 = blue
-                P: 1,                       
-                type: "number",             
-                regex: /^(0|[1-3])$/,       
+                P: 1,
+                type: "number",
+                regex: /^(0|[1-3])$/,
             },
             direction: {
                 // Direction at the crossroads 0=SX 1=DX
@@ -575,7 +586,7 @@ export const funcToId: Record<string, SysFunction> = {
                 type: "number",
             },
             maxPostition: {
-                 // Maximum position to reach expressed in cm
+                // Maximum position to reach expressed in cm
                 P: 4,
                 type: "number",
             },
@@ -598,12 +609,12 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    setStatemissionOrNumberPath:{
+    setStatemissionOrNumberPath: {
         id: "00018",
         params: {
             pathNumber: {
-                P: 1,                       
-                type: "number",                 
+                P: 1,
+                type: "number",
             },
             stationNumber: {
                 // Direction at the crossroads 0=SX 1=DX
@@ -624,7 +635,8 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 5,
                 type: "number",
             },
-            newPositionPath_cm: {//cm
+            newPositionPath_cm: {
+                //cm
                 P: 6,
                 type: "number",
             },
@@ -634,35 +646,36 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    detectAgvOrientationandColor:{
+    detectAgvOrientationandColor: {
         id: "00019",
         params: {
             colorCombinationM1: {
-                P: 1,                       
-                type: "number",                 
+                P: 1,
+                type: "number",
             },
             colorCombinationM2: {
                 P: 2,
                 type: "number",
             },
-            masterForce: {//Rename
-                    //Master force (1=M1 2=M2)
-                    // 1st digit = Color of M1
-                    // 2nd digit = Color of M2
-                    // Outcome in VR51
-                    // If all param.=0 in VR52 mem. color combination outcome
+            masterForce: {
+                //Rename
+                //Master force (1=M1 2=M2)
+                // 1st digit = Color of M1
+                // 2nd digit = Color of M2
+                // Outcome in VR51
+                // If all param.=0 in VR52 mem. color combination outcome
                 P: 7,
                 type: "number",
             },
         },
     },
-    sendMasterCall:{
+    sendMasterCall: {
         id: "00020",
         params: {
             idStation: {
                 // if >1000 the data is read in VR(P1-1000)
-                P: 1,                       
-                type: "number",                 
+                P: 1,
+                type: "number",
             },
             origin: {
                 P: 2,
@@ -690,19 +703,19 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    setOutputPlc:{
+    setOutputPlc: {
         id: "00021",
         params: {
             nrExit: {
-                P: 1,                       
-                type: "number",             
+                P: 1,
+                type: "number",
             },
             state: {
                 // 0 = off
                 // 1 = on
                 P: 2,
                 type: "number",
-                regex:/^(0|1)$/, 
+                regex: /^(0|1)$/,
             },
             impulsmiliseconds: {
                 //if > 0 the indicated status is pulsed)
@@ -711,16 +724,16 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    moveForwardBackOnColorAndPlaceSearch:{
+    moveForwardBackOnColorAndPlaceSearch: {
         id: "00022",
         params: {
             color: {
                 //color 1 = red  ======= MAYBE STRING IS BETTER CHOICE
                 //color 2 = green
                 //color 3 = blue
-                P: 1,                       
-                type: "number",             
-                regex: /^(0|[1-3])$/,       
+                P: 1,
+                type: "number",
+                regex: /^(0|[1-3])$/,
             },
             minRange: {
                 P: 2,
@@ -733,7 +746,7 @@ export const funcToId: Record<string, SysFunction> = {
             movementType: {
                 //  0: forward movement
                 //  1: backward movement
-                //  2: enable/disable plate search  
+                //  2: enable/disable plate search
                 P: 4,
                 type: "number",
             },
@@ -755,15 +768,15 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    jumpToLine:{
+    jumpToLine: {
         id: "00037",
         params: {
-            nrLineToJump: {     
-                P: 1,                       
-                type: "number",           
+            nrLineToJump: {
+                P: 1,
+                type: "number",
             },
             nrProgramtoJump: {
-               //No. of program to jump to (if 0 remains in the current program)
+                //No. of program to jump to (if 0 remains in the current program)
                 P: 2,
                 type: "number",
             },
@@ -778,12 +791,12 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    subRoutineCall:{
+    subRoutineCall: {
         id: "00038",
         params: {
-            nrLineStartProgramm: {     
-                P: 1,                       
-                type: "number",           
+            nrLineStartProgramm: {
+                P: 1,
+                type: "number",
             },
             nrProgrammToJump: {
                 //use 0 if current PRG
@@ -792,17 +805,17 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    callBackSubRoutine:{
+    callBackSubRoutine: {
         id: "00039",
         params: {},
     },
-    setVehiclePosition:{
+    setVehiclePosition: {
         id: "00040",
         params: {
-            newPosition: {     
+            newPosition: {
                 // / New position expressed in cm
-                P: 1,                       
-                type: "number",           
+                P: 1,
+                type: "number",
             },
             AGVInHome: {
                 P: 2,
@@ -838,16 +851,16 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    autoOff:{
+    autoOff: {
         id: "00041",
         params: {},
     },
-    setLaserArea:{
+    setLaserArea: {
         id: "00042",
         params: {
-            setAreaLaser1: {     
-                P: 1,                       
-                type: "number",           
+            setAreaLaser1: {
+                P: 1,
+                type: "number",
                 regex: /^(0|[1-8])$/,
             },
             setAreaLaser2: {
@@ -874,17 +887,18 @@ export const funcToId: Record<string, SysFunction> = {
                 P: 5,
                 type: "number",
             },
-                //Note: abort mission disables ultrasound
-                // Note: in manual disables ultrasound
-                // Note: in the semi-automatic menu there is a parameter to set
+            //Note: abort mission disables ultrasound
+            // Note: in manual disables ultrasound
+            // Note: in the semi-automatic menu there is a parameter to set
         },
     },
-    enableDevice:{//NEED RENAME ArrowLed
+    enableDevice: {
+        //NEED RENAME ArrowLed
         id: "00043",
         params: {
-            enableArrowLeft: {     
-                P: 1,                       
-                type: "boolean",       
+            enableArrowLeft: {
+                P: 1,
+                type: "boolean",
             },
             disableArrowLeft: {
                 P: 2,
@@ -909,11 +923,11 @@ export const funcToId: Record<string, SysFunction> = {
             //For P1 and P3 +10000 = AutoOff after Val-10000 (cm)
         },
     },
-    readProductCode:{
+    readProductCode: {
         id: "00044",
         params: {
             readSynncrhone: {
-                P: 1,                       
+                P: 1,
                 type: "boolean",
             },
             timeoutWait: {
@@ -935,26 +949,29 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    setSpeed:{//NEED RENAME
+    setSpeed: {
+        //NEED RENAME
         id: "00045",
         params: {
-            speed: { //percent
-                P: 1,                       
-                type: "number",           
+            speed: {
+                //percent
+                P: 1,
+                type: "number",
             },
-            speed_mm_on_ss: {//    mm/s
+            speed_mm_on_ss: {
+                //    mm/s
                 P: 2,
                 type: "number",
             },
             setSpeedFromVar: {
                 P: 3,
                 type: "number",
-                regex: /^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,//1-192     
+                regex: /^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/, //1-192
             },
             setSpeedFromVarUser: {
                 P: 4,
                 type: "number",
-                regex: /^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/,//1-192  
+                regex: /^(?:[1-9]|[1-9][0-9]|1[0-9][0-9]|1[9][0-9]|19[0-2])$/, //1-192
             },
             nrLineCallRoutineIfError: {
                 P: 5,
@@ -963,20 +980,22 @@ export const funcToId: Record<string, SysFunction> = {
             //The first valid parameter is considered
         },
     },
-    waitMission:{//NEED RENAME
+    waitMission: {
+        //NEED RENAME
         id: "00050",
         params: {
-            mode: { 
+            mode: {
                 // 0=Wait only for time indicated in P2
                 // 1=Start from operator
                 // 2=Local call
                 // 3=Call from Master
                 // 4=Call from master and copy program
-                P: 1,                       
-                type: "number",           
-                regex: /^(0|[1-4])$/,//0-4
+                P: 1,
+                type: "number",
+                regex: /^(0|[1-4])$/, //0-4
             },
-            waitTimeSec: {//seconds
+            waitTimeSec: {
+                //seconds
                 P: 2,
                 type: "number",
             },
@@ -990,16 +1009,16 @@ export const funcToId: Record<string, SysFunction> = {
                 // 1 = Call
                 P: 4,
                 type: "number",
-                regex: /^(0|1)$/,     
+                regex: /^(0|1)$/,
             },
         },
     },
-    viewString:{
+    viewString: {
         id: "00051",
         params: {
             caracter1: {
-                P: 1,                       
-                type: "number",           
+                P: 1,
+                type: "number",
             },
             caracter2: {
                 P: 2,
@@ -1027,16 +1046,16 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    waitForOperatorResponse:{
+    waitForOperatorResponse: {
         id: "00052",
         params: {
             ifOkJump: {
-                //Jump to line if Ok response 
-                P: 1,                       
-                type: "number",           
+                //Jump to line if Ok response
+                P: 1,
+                type: "number",
             },
             ifCancelJump: {
-                //Jump to line if Cancel response 
+                //Jump to line if Cancel response
                 P: 2,
                 type: "number",
             },
@@ -1067,22 +1086,23 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    doorCommand:{
+    doorCommand: {
         id: "00053",
         params: {},
         //The door address is managed by the Logo!
     },
-    
-    hookCart:{//NEED RENAME
+
+    hookCart: {
+        //NEED RENAME
         id: "00054",
         params: {
             hookMovement: {
                 // 0 = No Movement
                 // 1 = Raise Hook to sensor (3 sensors)
                 // 2 = Lower Hook (everything drops)
-                P: 1,                       
-                type: "number",      
-                regex: /^(0|1|2)$/       
+                P: 1,
+                type: "number",
+                regex: /^(0|1|2)$/,
             },
             P2: {
                 // 0 = No Rotation
@@ -1091,7 +1111,7 @@ export const funcToId: Record<string, SysFunction> = {
                 // 3 = alternate rotation
                 P: 2,
                 type: "number",
-                regex: /^(0|1|2|3)$/  
+                regex: /^(0|1|2|3)$/,
             },
             pinSpeed: {
                 // -100 counterclockwise or +100 clockwise
@@ -1108,78 +1128,80 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    
-    setRearWheels:{
+
+    setRearWheels: {
         id: "00055",
         params: {
             positionDegrees: {
-                P: 1,                       
-                type: "number",           
-                regex: /^(0|[1-9][0-9]?|[1-7][0-9]{2})$/
+                P: 1,
+                type: "number",
+                regex: /^(0|[1-9][0-9]?|[1-7][0-9]{2})$/,
             },
         },
         //The positions are zero 90 and 180 only
         //to consider that 90 is the straight wheel.
     },
 
-    controLoadOnBoard:{
+    controLoadOnBoard: {
         id: "00056",
         params: {},
     },
 
-    enableFrontLaser:{//RENAME
+    enableFrontLaser: {
+        //RENAME
         id: "00057",
         params: {
             EnableorDisable: {
-                // 1 = Disable front laser 
+                // 1 = Disable front laser
                 // 0 = Enable front laser
-                P: 1,                       
-                type: "boolean",    
+                P: 1,
+                type: "boolean",
             },
             readingTreshold1: {
                 P: 3,
                 type: "number",
-                regex: /^\d{4,}$/
+                regex: /^\d{4,}$/,
             },
             readingTreshold2: {
                 P: 4,
                 type: "number",
-                regex: /^\d{4,}$/
+                regex: /^\d{4,}$/,
             },
             readingTreshold3: {
                 P: 5,
                 type: "number",
-                regex: /^\d{4,}$/
+                regex: /^\d{4,}$/,
             },
             readingTreshold4: {
                 P: 6,
                 type: "number",
-                regex: /^\d{4,}$/
+                regex: /^\d{4,}$/,
             },
             percentReductionSpeed: {
                 P: 7,
                 type: "number",
-                regex: /^(0|[1-9][0-9]?|[1-9][0-9]{2})$/
+                regex: /^(0|[1-9][0-9]?|[1-9][0-9]{2})$/,
             },
         },
     },
-    
-    forkCommand:{//RENAME MAYBE
+
+    forkCommand: {
+        //RENAME MAYBE
         id: "00058",
         params: {
             P1: {
-                // 1 = Ev command in bits 
+                // 1 = Ev command in bits
                 // 2 = command with quota
-                P: 1,                       
-                type: "number",     
-                regex:/^(1|2)$/,      
+                P: 1,
+                type: "number",
+                regex: /^(1|2)$/,
             },
             quoteMm: {
                 P: 2,
                 type: "number",
             },
             UporDown: {
-                //1 = up with bits 
+                //1 = up with bits
                 //0 = down with bits
                 P: 3,
                 type: "number",
@@ -1187,12 +1209,12 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-    tractionControl:{
+    tractionControl: {
         id: "00059",
         params: {
             maximumCurrentAllowedAmper: {
-                P: 1,                       
-                type: "number",           
+                P: 1,
+                type: "number",
             },
             allarmActivationDelay: {
                 P: 2,
@@ -1201,105 +1223,104 @@ export const funcToId: Record<string, SysFunction> = {
         },
     },
 
-//     blindMovement2:{
-//         id: "00062",
-//         params: {
-//             steerStartPosition: {  
-//                 // Remake
-//                 // -1 =maintain orientation
-//                 P: 1,
-//                 type: "number",
-//             },
-//             cm: {
-//                 //Distance/Position expressed in cm
-//                 P: 2,
-//                 type: "number",
-//             },
-//             StearAfterMovement: {
-//                 //Steering position at the end of movement ( )
-//                 P: 3,
-//                 type: "number",
-//                 regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
-//             },
-//             movementType: {
-//                 // 0 = at the end of the movement the AGV will stop, resetting the position
-//                 // 1 = search for color 1
-//                 // 2 = search for color 2
-//                 // 3 = search for color 3
-//                 // 4 = Reverse movement 
-//                 P: 4,
-//                 type: "number",
-//                 regex: /^(0|[1-4])$/,//0-4
-//             },
-//             laser: {
-//                 //Laser area: set at the beginning of the line
-//                 P: 5,
-//                 type: "number",
-//                 regex: /^(0|[1-8])$/,//0-8
-//             },
-//             speed: {
-//                 //Driving speed
-//                 P: 6,
-//                 type: "number",
-//                 regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,//0-100
-//             },
-//             positionSecondMotorWheel_cm: {
-//                 //Distance/Position expressed in cm (2nd motor wheel)
-//                 P: 7,
-//                 type: "number",
-//                 regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
-//             },
-//         },
-//     },
-AGVOrientation:{
-    id: "00063",
-    params: {
-        steerStartPosition: {  
-                            P: 1,
-                            type: "number",
-                        },
-                        cm: {
-                            //Distance/Position expressed in cm
-                            P: 2,
-                            type: "number",
-                        },
-                        StearAfterMovement: {
-                            //Steering position at the end of movement ( )
-                            P: 3,
-                            type: "number",
-                            regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
-                        },
-                        movementType: {
-                            // 0 = at the end of the movement the AGV will stop, resetting the position
-                            // 1 = 0 but position not resetting
-                            // 2 = the indicated position is not a destination but the position in which the transition to the next program line occurs. The position is not reset
-                            // +1 = The movement of the train is not absolute but relative
-                            // +100 = AGV orientation with triangulation
-                            P: 4,
-                            type: "number",
-                            regex: /^(0|[1-4])$/,//0-4
-                        },
-                        directionOrientation: {
-                            //0 = Automatic (do not use)
-                            //  1 = Counterclockwise
-                            //  2 = Hourly
-                            P: 5,
-                            type: "number",
-                            regex: /^(0|[1-8])$/,//0-8
-                        },
-                        speed: {
-                            //Driving speed
-                            P: 6,
-                            type: "number",
-                            regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,//0-100
-                        },
-                        precisionOrientation: {
-                            P: 7,
-                            type: "number",
-                        },
+    //     blindMovement2:{
+    //         id: "00062",
+    //         params: {
+    //             steerStartPosition: {
+    //                 // Remake
+    //                 // -1 =maintain orientation
+    //                 P: 1,
+    //                 type: "number",
+    //             },
+    //             cm: {
+    //                 //Distance/Position expressed in cm
+    //                 P: 2,
+    //                 type: "number",
+    //             },
+    //             StearAfterMovement: {
+    //                 //Steering position at the end of movement ( )
+    //                 P: 3,
+    //                 type: "number",
+    //                 regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
+    //             },
+    //             movementType: {
+    //                 // 0 = at the end of the movement the AGV will stop, resetting the position
+    //                 // 1 = search for color 1
+    //                 // 2 = search for color 2
+    //                 // 3 = search for color 3
+    //                 // 4 = Reverse movement
+    //                 P: 4,
+    //                 type: "number",
+    //                 regex: /^(0|[1-4])$/,//0-4
+    //             },
+    //             laser: {
+    //                 //Laser area: set at the beginning of the line
+    //                 P: 5,
+    //                 type: "number",
+    //                 regex: /^(0|[1-8])$/,//0-8
+    //             },
+    //             speed: {
+    //                 //Driving speed
+    //                 P: 6,
+    //                 type: "number",
+    //                 regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,//0-100
+    //             },
+    //             positionSecondMotorWheel_cm: {
+    //                 //Distance/Position expressed in cm (2nd motor wheel)
+    //                 P: 7,
+    //                 type: "number",
+    //                 regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/,//0-360
+    //             },
+    //         },
+    //     },
+    AGVOrientation: {
+        id: "00063",
+        params: {
+            steerStartPosition: {
+                P: 1,
+                type: "number",
+            },
+            cm: {
+                //Distance/Position expressed in cm
+                P: 2,
+                type: "number",
+            },
+            StearAfterMovement: {
+                //Steering position at the end of movement ( )
+                P: 3,
+                type: "number",
+                regex: /^(?:[0-9]|[1-9]\d|[12][0-9]{2}|3[0-5][0-9]|360)$/, //0-360
+            },
+            movementType: {
+                // 0 = at the end of the movement the AGV will stop, resetting the position
+                // 1 = 0 but position not resetting
+                // 2 = the indicated position is not a destination but the position in which the transition to the next program line occurs. The position is not reset
+                // +1 = The movement of the train is not absolute but relative
+                // +100 = AGV orientation with triangulation
+                P: 4,
+                type: "number",
+                regex: /^(0|[1-4])$/, //0-4
+            },
+            directionOrientation: {
+                //0 = Automatic (do not use)
+                //  1 = Counterclockwise
+                //  2 = Hourly
+                P: 5,
+                type: "number",
+                regex: /^(0|[1-8])$/, //0-8
+            },
+            speed: {
+                //Driving speed
+                P: 6,
+                type: "number",
+                regex: /^(0|[1-9][0-9]?|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/, //0-100
+            },
+            precisionOrientation: {
+                P: 7,
+                type: "number",
+            },
+        },
     },
-},
 };
-
 
 export default { funcToId };
