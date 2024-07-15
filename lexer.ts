@@ -72,7 +72,13 @@ export function tokenize(sourceCode: string, fPath: string): Token[] {
                         ? "90"
                         : string == "right"
                         ? "180"
-                        : string,
+                        :string == "red"
+                        ? "1"
+                        : string == "green"
+                        ? "2"
+                        : string == "blue"
+                        ? "3"
+                        :string,
                     TokenType.String
                 )
             );
@@ -105,7 +111,7 @@ export function tokenize(sourceCode: string, fPath: string): Token[] {
             tokens.push(token(num, TokenType.Number));
         } else if (isAlpha(tkn)) {
             let ident = tkn;
-            while (src.length && isAlpha(src[0])) {
+            while (src.length && (isAlpha(src[0]) || isInt(src[0]))) {
                 ident += src.shift();
                 column++;
             }

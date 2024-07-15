@@ -1,11 +1,3 @@
-wait(
-    seconds=3, 
-    synch=false
+setVr(
+    Vr80 = 3
 )
-wait(synch=true)
-
-AGVOrientation(steerStartPosition="front")
-
-if 3 > 2 do
-    wait(synch=true)
-fi

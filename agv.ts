@@ -805,7 +805,7 @@ export const funcToId: Record<string, SysFunction> = {
             },
         },
     },
-    callBackSubRoutine: {
+    subFunction: {
         id: "00039",
         params: {},
     },
